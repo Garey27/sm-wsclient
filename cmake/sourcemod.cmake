@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.2)
 
 # CMake configuration #
 # SourceMod SDK
-set(SM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dep/sourcemod")
 string(REGEX REPLACE "\\\\" "/" SM_PATH "${SM_PATH}")
 string(REGEX REPLACE "//" "/" SM_PATH "${SM_PATH}")
 
@@ -11,7 +10,6 @@ if(NOT EXISTS "${SM_PATH}/public")
 endif()
 
 # SourcePawn
-set(SP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dep/sourcemod/sourcepawn")
 string(REGEX REPLACE "\\\\" "/" SP_PATH "${SP_PATH}")
 string(REGEX REPLACE "//" "/" SP_PATH "${SP_PATH}")
 
