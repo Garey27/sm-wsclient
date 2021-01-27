@@ -1,4 +1,0 @@
---triplet
-x86-linux
-boost-beast
-openssl

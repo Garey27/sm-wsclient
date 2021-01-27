@@ -17,12 +17,15 @@ jobs:
           - os: windows-latest
             triplet: x86-windows-static
           - os: ubuntu-latest
-            triplet: x86-linux
+            triplet: x86-linux-static
     steps:
       - uses: actions/checkout@v1
         with:
           submodules: recursive
-
+      - uses: canastro/copy-file-action@master
+        with:
+          source: ${{ github.workspace }}/vcpkg/x86-linux-static.cmake
+          target: ${{ github.workspace }}/dep/vcpkg/triplets/x86-linux-static.cmake
       - uses: lukka/get-cmake@latest
       
       - name: Set vcpkg's response file path used as part of cache's key.
