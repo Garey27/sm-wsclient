@@ -1,70 +1,81 @@
-name: Build
+# Copyright (c) 2019-2020-2021 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: hosted-basic-autocache
 on: [push]
 
 jobs:
   job:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
-    runs-on: ${{ matrix.os }}-latest
+    name: ${{ matrix.os }}-hosted-basic
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      max-parallel: 8
       matrix:
-        name: [ubuntu-gcc, ubuntu-clang, windows-msvc]
-        buildtype: [Debug, Release]
+        os: [ubuntu-latest, windows-latest]
+        platform: [x86]
         include:
-          - name: windows-msvc
-            os: windows
-            cxx: cl.exe
-            cc: cl.exe
+          - os: windows-latest
             triplet: x86-windows-static
-            packages: >
-              boost-beast openssl
-          - name: ubuntu-gcc
-            os: ubuntu
-            cxx: g++
-            cc: gcc
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+            vcpkgPackages: 'boost-beast openssl'
+          - os: ubuntu-latest
             triplet: x86-linux
-            packages: >
-              boost-beast openssl
-          - name: ubuntu-clang
-            os: ubuntu
-            cxx: clang++
-            cc: clang
-            triplet: x86-linux
-            packages: >
-              boost-beast openssl
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+            vcpkgPackages: 'boost-beast openssl'
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
         with:
           submodules: recursive
 
-      - name: Unshallow
-        run: git fetch --prune --unshallow
-
-      - name: Get latest CMake
-        # Using 'latest' branch, the latest CMake is installed.
-        uses: lukka/get-cmake@latest
-
-      - uses: lukka/set-shell-env@v1
-        with:
-          CXX: ${{ matrix.cxx }}
-          CC: ${{ matrix.cc }}
-
-      - name: Run vcpkg
-        uses: lukka/run-vcpkg@v2
-        with:
-          vcpkgArguments: ${{ matrix.packages }}
-          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
-          vcpkgTriplet: ${{ matrix.triplet }}
-          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
-
-      - name: Build with CMake
-        uses: lukka/run-cmake@v2
-        with:
-          useVcpkgToolchainFile: true
-          buildDirectory: ${{ runner.workspace }}/build
-          cmakeBuildType: ${{ matrix.buildtype }}
-
+      - uses: lukka/get-cmake@latest
       - name: dir
         run: find $RUNNER_WORKSPACE
         shell: bash
+      - name: Restore artifacts, or run vcpkg, build and cache artifacts
+        uses: lukka/run-vcpkg@main
+        id: runvcpkg
+        with:
+          vcpkgArguments: '${{ matrix.vcpkgPackages }}'
+          vcpkgTriplet: '${{ matrix.triplet }}'
+          vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+      - name: Prints outputs of run-vcpkg task
+        run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
+      - name: Run CMake+Ninja without triplet
+        uses: lukka/run-cmake@main
+        id: runcmake
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildWithCMakeArgs: '-- -v'
+          buildDirectory: '${{ runner.workspace }}/b/ninja/'
+      - name: Run CMake+Ninja with triplet (cmd)
+        uses: lukka/run-cmake@main
+        id: runcmake_cmd
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildWithCMakeArgs: '-- -v'
+          vcpkgTriplet: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}
+          buildDirectory: '${{ runner.workspace }}/b/ninja/'
+      - name: Run CMake+Ninja with triplet (bash)
+        if: false
+        uses: lukka/run-cmake@main
+        id: runcmake_bash
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildWithCMakeArgs: '-- -v'
+          vcpkgTriplet: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}
+          buildDirectory: '${{ runner.workspace }}/b/ninja-bash/'
+          useShell: bash
