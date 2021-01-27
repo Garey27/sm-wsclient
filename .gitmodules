@@ -1,0 +1,6 @@
+[submodule "dep/sourcemod"]
+	path = dep/sourcemod
+	url = https://github.com/alliedmodders/sourcemod
+[submodule "dep/certify"]
+	path = dep/certify
+	url = https://github.com/djarek/certify
