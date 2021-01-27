@@ -4,3 +4,6 @@
 [submodule "dep/certify"]
 	path = dep/certify
 	url = https://github.com/djarek/certify
+[submodule "dep/vcpkg"]
+	path = dep/vcpkg
+	url = https://github.com/microsoft/vcpkg

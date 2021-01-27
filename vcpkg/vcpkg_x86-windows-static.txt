@@ -1,0 +1,4 @@
+--triplet
+x86-windows-static
+boost-beast
+openssl
