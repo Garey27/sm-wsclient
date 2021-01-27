@@ -22,11 +22,11 @@ jobs:
       - uses: actions/checkout@v1
         with:
           submodules: recursive
-      - uses: canastro/copy-file-action@master
-        with:
-          source: ${{ github.workspace }}/vcpkg/x86-linux-static.cmake
-          target: ${{ github.workspace }}/dep/vcpkg/triplets/x86-linux-static.cmake
-      - uses: lukka/get-cmake@latest
+      - name: Set the value
+      
+      - if: matrix.os == 'ubuntu-latest'
+            run: |
+              cp ${{ github.workspace }}/vcpkg/x86-linux-static.cmake ${{ github.workspace }}/dep/vcpkg/triplets/x86-linux-static.cmake
       
       - name: Set vcpkg's response file path used as part of cache's key.
         uses: lukka/set-shell-env@master
