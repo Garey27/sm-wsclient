@@ -1,2 +1,0 @@
-boost-beast:x86-windows-static
-openssl:x86-windows-static

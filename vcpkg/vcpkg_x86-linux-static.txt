@@ -1,3 +1,0 @@
---triplet
-x86-linux-static
-boost-beast openssl
