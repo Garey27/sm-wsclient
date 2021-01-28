@@ -11,17 +11,17 @@ for:
       - image: Ubuntu1604
   install:
     - sudo apt-get update
-    - sudo apt-get --assume-yes install gcc-multilib g++-multilib gcc-4.9-multilib g++-4.9-multilib p7zip-full libssl-dev
+    - sudo apt-get --assume-yes install gcc-multilib g++-multilib p7zip-full libssl-dev
   build_script:
     - git submodule update --init --recursive
     - cp vcpkg/x86-linux-sm.cmake dep/vcpkg/triplets/x86-linux-sm.cmake
     - cd dep/vcpkg
     - ./bootstrap-vcpkg.sh    
     - ./vcpkg install boost-beast openssl --triplet x86-linux-sm    
-    - sudo update-alternatives --remove-all gcc || true
-    - sudo update-alternatives --remove-all g++ || true
-    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 10 || true
-    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 10 || true
+    #- sudo update-alternatives --remove-all gcc || true
+    #- sudo update-alternatives --remove-all g++ || true
+    #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 10 || true
+    #- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 10 || true
     - cd ../..
     - mkdir build
     - cd build
@@ -40,7 +40,7 @@ for:
         secure: QDEGzc09i3TjexbQdbxWkOIfYdIkoFZDOyG4e+uFywRQQ5JDuyO3eFPW9dAlf+5u
       artifact: sm-wsclient-linux
       on:
-        branch: master
+        branch: main
       prerelease: true
 -
 
@@ -71,5 +71,5 @@ for:
         secure: QDEGzc09i3TjexbQdbxWkOIfYdIkoFZDOyG4e+uFywRQQ5JDuyO3eFPW9dAlf+5u
       artifact: sm-wsclient-win32
       on:
-        branch: master
+        branch: main
       prerelease: true
