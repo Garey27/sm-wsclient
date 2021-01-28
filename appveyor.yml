@@ -29,7 +29,7 @@ for:
     - cd ..
     - cmake --build build --config Release --parallel
   after_build:
-    - sh: 7z a sm-wsclient-linux.zip ./build/ws_client.ext.so
+    - sh: 7z a sm-wsclient-linux.zip ./build/wsclient.ext.so
   artifacts:
     - path: sm-wsclient-linux.zip
       name: sm-wsclient-linux
@@ -60,7 +60,7 @@ for:
     - cd ..
     - cmake --build build --config Release --parallel
   after_build:
-    - cmd: 7z a sm-wsclient-win32.zip .\build\Release\ws_client.ext.dll
+    - cmd: 7z a sm-wsclient-win32.zip .\build\Release\wsclient.ext.dll
   artifacts:
     - path: sm-wsclient-win32.zip
       name: sm-wsclient-win32
