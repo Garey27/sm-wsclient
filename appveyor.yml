@@ -60,7 +60,7 @@ for:
     - cd ..
     - cmake --build build --config Release --parallel
   after_build:
-    - cmd: 7z a sm-wsclient-win32.zip .\build\Release\ws_client.dll
+    - cmd: 7z a sm-wsclient-win32.zip .\build\Release\ws_client.ext.dll
   artifacts:
     - path: sm-wsclient-win32.zip
       name: sm-wsclient-win32

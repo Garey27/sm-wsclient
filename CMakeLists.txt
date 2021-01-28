@@ -13,7 +13,7 @@ find_package(Boost REQUIRED)
 find_package(OpenSSL REQUIRED)
 
 # CMake configuration #
-set(OUTPUT_NAME "extension" CACHE STRING "Output name of the extension")
+set(OUTPUT_NAME "wsclient" CACHE STRING "Output name of the extension")
 string(REGEX REPLACE " " "" OUTPUT_NAME "${OUTPUT_NAME}")
 
 if(OUTPUT_NAME STREQUAL "")
