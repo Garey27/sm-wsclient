@@ -1,3 +1,2 @@
---triplet
-x86-windows-static
-boost-beast openssl
+boost-beast:x86-windows-static
+openssl:x86-windows-static
