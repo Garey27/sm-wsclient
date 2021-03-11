@@ -5,14 +5,13 @@ extern net::io_context ioc;
 std::unordered_map<Handle_t, std::shared_ptr<session>> ws_sessions;
 
 static cell_t OnWriteCB(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	IPluginFunction* callback = pContext->GetFunctionById(params[2]);
@@ -22,14 +21,13 @@ static cell_t OnWriteCB(IPluginContext* pContext, const cell_t* params) {
 }
 
 static cell_t OnReadCB(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	IPluginFunction* callback = pContext->GetFunctionById(params[2]);
@@ -39,14 +37,13 @@ static cell_t OnReadCB(IPluginContext* pContext, const cell_t* params) {
 }
 
 static cell_t OnErrorCB(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	IPluginFunction* callback = pContext->GetFunctionById(params[2]);
@@ -56,14 +53,13 @@ static cell_t OnErrorCB(IPluginContext* pContext, const cell_t* params) {
 }
 
 static cell_t OnOpenCB(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	IPluginFunction* callback = pContext->GetFunctionById(params[2]);
@@ -74,14 +70,13 @@ static cell_t OnOpenCB(IPluginContext* pContext, const cell_t* params) {
 }
 
 static cell_t OnCloseCB(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	IPluginFunction* callback = pContext->GetFunctionById(params[2]);
@@ -134,41 +129,38 @@ static cell_t WebSocketClient(IPluginContext* pContext, const cell_t* params) {
 }
 
 static cell_t OpenSession(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 	session->second->run();
 	return 1;
 }
 
 static cell_t CloseSession(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 	session->second->close();
 	return 1;
 }
 static cell_t WriteDataBuffer(IPluginContext* pContext, const cell_t* params) {
-	HandleError err;
 	HandleSecurity sec(pContext->GetIdentity(), myself->GetIdentity());
 
 	Handle_t hndlSession = static_cast<Handle_t>(params[1]);
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	cell_t* addr;
@@ -192,7 +184,7 @@ static cell_t WriteDataString(IPluginContext* pContext, const cell_t* params) {
 	auto session = ws_sessions.find(hndlSession);
 	if (session == ws_sessions.end()) {
 		return pContext->ThrowNativeError(
-			"Invalid WebSocket client handle %x (error %d)", htWebsocketClient, err);
+			"Invalid WebSocket client handle %x", htWebsocketClient);
 	}
 
 	char* str;
